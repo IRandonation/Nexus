@@ -1,0 +1,32 @@
+[package]
+name = "nexus"
+version = "0.1.0"
+description = "AI驱动的智能日程与回顾助手"
+authors = ["Nexus Team"]
+license = "MIT"
+repository = ""
+edition = "2021"
+rust-version = "1.70"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.6", features = ["system-tray", "notification-all", "global-shortcut-all", "global-shortcut", "notification", "window-all", "shell-open"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+rusqlite = { version = "0.31", features = ["bundled", "chrono", "uuid"] }
+refinery = { version = "0.8", features = ["rusqlite"] }
+chrono = { version = "0.4", features = ["serde"] }
+reqwest = { version = "0.11", features = ["json"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+anyhow = "1.0"
+thiserror = "1.0"
+uuid = { version = "1.8", features = ["v4", "serde"] }
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

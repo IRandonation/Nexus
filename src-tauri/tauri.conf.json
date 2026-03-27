@@ -1,0 +1,56 @@
+{
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:5173",
+    "distDir": "../dist"
+  },
+  "tauri": {
+    "systemTray": {
+      "iconPath": "icons/icon.ico",
+      "iconAsTemplate": true
+    },
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "notification": {
+        "all": true
+      },
+      "globalShortcut": {
+        "all": true
+      },
+      "window": {
+        "all": true
+      }
+    },
+    "windows": [
+      {
+        "label": "main",
+        "title": "Nexus",
+        "width": 900,
+        "height": 700,
+        "minWidth": 600,
+        "minHeight": 400,
+        "visible": true,
+        "decorations": true,
+        "transparent": true,
+        "skipTaskbar": false
+      }
+    ],
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "bundle": {
+      "active": true,
+      "targets": ["msi"],
+      "identifier": "com.nexus.app",
+      "icon": []
+    }
+  }
+}
