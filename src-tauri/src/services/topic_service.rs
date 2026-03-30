@@ -1,6 +1,7 @@
 use crate::db::Database;
 use crate::models::topic::{CreateTopicPayload, Topic, UpdateTopicPayload, PRESET_COLORS};
 use chrono::Utc;
+use rusqlite::params;
 use uuid::Uuid;
 
 pub struct TopicService {
@@ -37,6 +38,28 @@ impl TopicService {
 
         let conn = self.db.get_connection();
         let conn = conn.lock().map_err(|e| e.to_string())?;
+
+        let name_count: i64 = conn
+            .query_row(
+                "SELECT COUNT(*) FROM topics WHERE name = ?1",
+                params![&topic.name],
+                |row| row.get(0),
+            )
+            .unwrap_or(0);
+        if name_count > 0 {
+            return Err("主题名称已存在".to_string());
+        }
+
+        let color_count: i64 = conn
+            .query_row(
+                "SELECT COUNT(*) FROM topics WHERE color = ?1",
+                params![&topic.color],
+                |row| row.get(0),
+            )
+            .unwrap_or(0);
+        if color_count > 0 {
+            return Err("该颜色已被其他主题使用".to_string());
+        }
 
         let result = conn.execute(
             "INSERT INTO topics (id, name, color, created_at) VALUES (?1, ?2, ?3, ?4)",
@@ -122,6 +145,28 @@ impl TopicService {
 
         let conn = self.db.get_connection();
         let conn = conn.lock().map_err(|e| e.to_string())?;
+
+        let name_count: i64 = conn
+            .query_row(
+                "SELECT COUNT(*) FROM topics WHERE name = ?1 AND id != ?2",
+                params![&topic.name, &topic.id],
+                |row| row.get(0),
+            )
+            .unwrap_or(0);
+        if name_count > 0 {
+            return Err("主题名称已存在".to_string());
+        }
+
+        let color_count: i64 = conn
+            .query_row(
+                "SELECT COUNT(*) FROM topics WHERE color = ?1 AND id != ?2",
+                params![&topic.color, &topic.id],
+                |row| row.get(0),
+            )
+            .unwrap_or(0);
+        if color_count > 0 {
+            return Err("该颜色已被其他主题使用".to_string());
+        }
 
         conn.execute(
             "UPDATE topics SET name = ?1, color = ?2 WHERE id = ?3",

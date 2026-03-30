@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTopicStore } from '@/stores/topicStore';
 import { useTaskStore } from '@/stores/taskStore';
-import { Plus, Check, ChevronDown, FolderOpen } from '@/components/ui/icons';
+import { Plus, Check, ChevronDown, FolderOpen, MoreHorizontal } from '@/components/ui/icons';
 
 interface TopicSidebarProps {
   collapsed: boolean;
@@ -10,11 +10,12 @@ interface TopicSidebarProps {
 }
 
 export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle }) => {
-  const { topics, presetColors, loadTopics, loadPresetColors, createTopic, selectedTopicId, setSelectedTopic } = useTopicStore();
+  const { topics, presetColors, loadTopics, loadPresetColors, createTopic, deleteTopic, selectedTopicId, setSelectedTopic } = useTopicStore();
   const tasks = useTaskStore(state => state.tasks);
   const [isCreating, setIsCreating] = useState(false);
   const [newTopicName, setNewTopicName] = useState('');
   const [selectedColor, setSelectedColor] = useState('#3B82F6');
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   useState(() => {
     loadTopics();
@@ -93,24 +94,59 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
           {topics.map(topic => {
             const count = getTaskCount(topic.id);
             const isSelected = topic.id === selectedTopicId;
+            const isMenuOpen = openMenuId === topic.id;
             return (
-              <button
-                key={topic.id}
-                onClick={() => setSelectedTopic(isSelected ? null : topic.id)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all hover:bg-white/5 flex items-center gap-2 ${
-                  isSelected ? 'bg-white/10' : ''
-                }`}
-              >
-                <span
-                  className="w-3 h-3 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: topic.color }}
-                />
-                <span className="text-white truncate flex-1">{topic.name}</span>
-                {count > 0 && (
-                  <span className="text-xs text-gray-500">{count}</span>
+              <div key={topic.id} className="relative group">
+                <button
+                  onClick={() => setSelectedTopic(isSelected ? null : topic.id)}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all hover:bg-white/5 flex items-center gap-2 ${
+                    isSelected ? 'bg-white/10' : ''
+                  }`}
+                >
+                  <span
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: topic.color }}
+                  />
+                  <span className="text-white truncate flex-1">{topic.name}</span>
+                  {count > 0 && (
+                    <span className="text-xs text-gray-500">{count}</span>
+                  )}
+                  {isSelected && <Check size={12} className="text-accent" />}
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenMenuId(isMenuOpen ? null : topic.id);
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-white/10 text-gray-400 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+                  style={{ opacity: isMenuOpen ? 1 : undefined }}
+                >
+                  <MoreHorizontal size={14} />
+                </button>
+                {isMenuOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setOpenMenuId(null)}
+                    />
+                    <div className="absolute right-2 top-full mt-1 z-20 bg-surface-1 border border-glass-border rounded-lg shadow-lg overflow-hidden min-w-[100px]">
+                      <button
+                        onClick={async () => {
+                          await deleteTopic(topic.id);
+                          await loadTopics();
+                          setOpenMenuId(null);
+                          if (selectedTopicId === topic.id) {
+                            setSelectedTopic(null);
+                          }
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-white/5 transition-colors flex items-center gap-2"
+                      >
+                        删除
+                      </button>
+                    </div>
+                  </>
                 )}
-                {isSelected && <Check size={12} className="text-accent" />}
-              </button>
+              </div>
             );
           })}
         </div>

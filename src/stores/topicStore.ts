@@ -53,6 +53,7 @@ export const useTopicStore = create<TopicStore>((set) => ({
       return topic;
     } catch (error) {
       console.error('[TopicStore] Failed to create topic:', error);
+      alert(error);
       throw error;
     }
   },
@@ -67,6 +68,7 @@ export const useTopicStore = create<TopicStore>((set) => ({
       return topic;
     } catch (error) {
       console.error('[TopicStore] Failed to update topic:', error);
+      alert(error);
       throw error;
     }
   },

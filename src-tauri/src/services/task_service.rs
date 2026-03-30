@@ -209,6 +209,7 @@ impl TaskService {
         let extracted_entities = task.extracted_entities.as_ref().map(|e| e.join(", ")).unwrap_or_default();
         let extracted_datetime = task.extracted_datetime.clone().unwrap_or_default();
         let event = task.event.clone().unwrap_or_default();
+        let topic_id = task.topic_id.clone().unwrap_or_default();
         
         conn.execute(
             "UPDATE tasks SET 
@@ -217,14 +218,16 @@ impl TaskService {
              extracted_entities = ?3, 
              event = ?4,
              priority = ?5,
-             updated_at = ?6
-             WHERE id = ?7",
+             topic_id = ?6,
+             updated_at = ?7
+             WHERE id = ?8",
             [
                 &task.content,
                 &extracted_datetime,
                 &extracted_entities,
                 &event,
                 &(task.priority as i32).to_string(),
+                &topic_id,
                 &task.updated_at,
                 &task.id,
             ],

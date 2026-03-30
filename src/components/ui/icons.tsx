@@ -63,4 +63,5 @@ export const ChevronDown = createIcon('ChevronDown');
 export const ChevronRight = createIcon('ChevronRight');
 export const FolderOpen = createIcon('FolderOpen');
 export const Menu = createIcon('Menu');
+export const MoreHorizontal = createIcon('MoreHorizontal');
 

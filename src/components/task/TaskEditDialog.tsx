@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Calendar, MapPin, Tag, Trash2 } from '@/components/ui/icons';
+import { X, Check, Calendar, MapPin, Tag, Trash2, FolderOpen } from '@/components/ui/icons';
+import { TopicSelector } from '@/components/topic/TopicSelector';
 import type { Task } from '@/types';
 
 interface TaskEditDialogProps {
@@ -157,6 +158,18 @@ export const TaskEditDialog: React.FC<TaskEditDialogProps> = ({
                   </button>
                 ))}
               </div>
+            </div>
+
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block flex items-center gap-1">
+                <FolderOpen size={10} /> 主题
+              </label>
+              <TopicSelector
+                selectedTopicId={editedTask.topicId || null}
+                onSelect={(id) =>
+                  setEditedTask({ ...editedTask, topicId: id || undefined })
+                }
+              />
             </div>
           </div>
 
