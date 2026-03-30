@@ -4,7 +4,6 @@ AI驱动的智能日程与回顾助手
 
 ## 功能特性
 
-- 🎯 **全局热键**: Alt+N 快速唤醒输入框
 - 🤖 **AI 意图解析**: DeepSeek API 智能理解任务
 - 📝 **任务管理**: 创建、完成、优先级设置
 - 🔍 **全文搜索**: SQLite FTS5 支持
@@ -43,13 +42,6 @@ npm run tauri:build
 ```bash
 export DEEPSEEK_API_KEY="your-api-key"
 ```
-
-## 快捷键
-
-| 快捷键 | 功能 |
-|--------|------|
-| Alt+N | 显示/隐藏 Omni-Bar |
-| Alt+Shift+N | 显示/隐藏 Widget |
 
 ## 目录结构
 

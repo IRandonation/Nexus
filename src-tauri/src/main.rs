@@ -7,7 +7,7 @@ mod db;
 mod models;
 mod services;
 
-use commands::{hotkey, tray, task, config, topic};
+use commands::{tray, task, config, topic};
 
 fn main() {
     println!("[Nexus] Starting application...");
@@ -33,9 +33,6 @@ fn main() {
         })
         .setup(|app| {
             println!("[Nexus] Setting up application...");
-            
-            hotkey::register_hotkeys(&app.handle())?;
-            println!("[Nexus] Hotkeys registered");
             
             let db = Database::new(&app.handle())?;
             println!("[Nexus] Database initialized");

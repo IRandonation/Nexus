@@ -1,4 +1,3 @@
-pub mod hotkey;
 pub mod tray;
 pub mod window;
 pub mod task;
