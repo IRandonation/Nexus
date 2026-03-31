@@ -74,39 +74,35 @@ export const OmniBar: React.FC = () => {
   }, []);
   
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -20, scale: 0.95 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
-      className="glass-container p-4 w-[600px] relative"
-    >
-      <button
-        onClick={handleClose}
-        className="absolute top-2 right-2 p-1 text-gray-500 hover:text-white transition-colors"
-      >
-        <X size={16} />
-      </button>
-      
-      <form onSubmit={handleSubmit} className="flex items-center gap-3">
-        <Search className="text-gray-400" size={20} />
+    <div className="min-h-[180px] p-5 bg-surface-1/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10">
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center">
+          <Search className="text-accent" size={16} />
+        </div>
         <input
           ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="输入任务，例如：明天下午三点和导师开会..."
-          className="glass-input text-base flex-1"
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+          placeholder="描述任务，例如：明天下午三点和导师开会"
+          className="bg-transparent text-white placeholder-gray-500 text-base flex-1 outline-none"
         />
         {isParsing && (
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           >
-            <Sparkles className="text-accent" size={20} />
+            <Sparkles className="text-accent" size={18} />
           </motion.div>
         )}
-      </form>
+        <button
+          onClick={handleClose}
+          className="w-6 h-6 rounded-md hover:bg-white/10 flex items-center justify-center text-gray-500 hover:text-white transition-colors"
+        >
+          <X size={14} />
+        </button>
+      </div>
       
       <div className="mt-3 flex items-center gap-2">
         <TopicSelector
@@ -124,6 +120,6 @@ export const OmniBar: React.FC = () => {
           />
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 };

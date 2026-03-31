@@ -1,17 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Grip, Circle, AlertCircle } from '@/components/ui/icons';
 import { useTaskStore } from '@/stores/taskStore';
 import { useTopicStore } from '@/stores/topicStore';
+import { appWindow } from '@tauri-apps/api/window';
+import { availableMonitors } from '@tauri-apps/api/window';
 
 export const Widget: React.FC = () => {
   const stats = useTaskStore(state => state.getStats());
   const todayTasks = useTaskStore(state => state.getTodayTasks());
   const topics = useTopicStore(state => state.topics);
   
+  useEffect(() => {
+    const positionWidget = async () => {
+      try {
+        const monitors = await availableMonitors();
+        if (monitors.length > 0) {
+          const primaryMonitor = monitors[0];
+          const size = primaryMonitor.size;
+          const widgetWidth = 320;
+          const widgetHeight = 200;
+          const margin = 20;
+          
+          const x = size.width - widgetWidth - margin;
+          const y = size.height - widgetHeight - margin - 40;
+          
+          await appWindow.setPosition({ type: 'Physical', x, y });
+        }
+      } catch (e) {
+        console.error('[Widget] Failed to position:', e);
+      }
+    };
+    
+    positionWidget();
+  }, []);
+  
   const getTopic = (topicId?: string) => {
     if (!topicId) return null;
     return topics.find(t => t.id === topicId);
+  };
+
+  const handleDragStart = async () => {
+    await appWindow.startDragging();
   };
   
   return (
@@ -20,14 +50,11 @@ export const Widget: React.FC = () => {
       animate={{ opacity: 1, x: 0 }}
       className="glass-container p-4 w-80 select-none"
     >
-      {/* 拖拽把手 - data-tauri-drag 启用窗口拖拽 */}
       <div 
-        className="flex justify-center mb-3"
-        data-tauri-drag
+        className="flex justify-center mb-3 cursor-grab active:cursor-grabbing"
+        onMouseDown={handleDragStart}
       >
-        <div className="w-8 h-1 bg-white/20 rounded-full cursor-grab active:cursor-grabbing hover:bg-white/30 transition-colors">
-          <Grip size={16} className="mx-auto text-white/40" />
-        </div>
+        <Grip size={20} className="text-white/40 hover:text-white/60 transition-colors" />
       </div>
       
       <div className="grid grid-cols-3 gap-2 mb-4">

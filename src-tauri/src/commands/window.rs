@@ -8,12 +8,13 @@ pub fn show_omni_bar(app: AppHandle) -> Result<(), String> {
         win
     } else {
         WindowBuilder::new(&app, "omni-bar", WindowUrl::App("/omni-bar".into()))
-            .title("Nexus")
+            .title("Nexus Quick Add")
             .decorations(false)
             .transparent(true)
             .always_on_top(true)
             .skip_taskbar(true)
-            .inner_size(600.0, 56.0)
+            .inner_size(500.0, 200.0)
+            .min_inner_size(400.0, 100.0)
             .build()
             .map_err(|e| e.to_string())?
     };
