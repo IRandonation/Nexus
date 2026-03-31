@@ -20,8 +20,12 @@ export const Widget: React.FC = () => {
       animate={{ opacity: 1, x: 0 }}
       className="glass-container p-4 w-80 select-none"
     >
-      <div className="flex justify-center mb-3">
-        <div className="w-8 h-1 bg-white/20 rounded-full cursor-grab active:cursor-grabbing">
+      {/* 拖拽把手 - data-tauri-drag 启用窗口拖拽 */}
+      <div 
+        className="flex justify-center mb-3"
+        data-tauri-drag
+      >
+        <div className="w-8 h-1 bg-white/20 rounded-full cursor-grab active:cursor-grabbing hover:bg-white/30 transition-colors">
           <Grip size={16} className="mx-auto text-white/40" />
         </div>
       </div>
