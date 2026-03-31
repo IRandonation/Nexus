@@ -50,21 +50,8 @@ fn main() {
             app.manage(AIService::new(api_key.clone()));
             println!("[Nexus] AIService initialized (API key: {})", if api_key.is_empty() { "not set - please configure in Settings" } else { "***" });
             
-            // Auto-create Widget window in bottom-right corner
-            {
-                use tauri::WindowBuilder;
-                let _ = WindowBuilder::new(app, "widget", tauri::WindowUrl::App("/widget".into()))
-                    .title("Nexus Widget")
-                    .decorations(false)
-                    .transparent(true)
-                    .always_on_top(true)
-                    .skip_taskbar(true)
-                    .inner_size(320.0, 200.0)
-                    .position(9999.0, 9999.0) // Will be repositioned by frontend
-                    .build();
-                
-                println!("[Nexus] Widget window created");
-            }
+            commands::window::ensure_widget_visible(&app.handle())?;
+            println!("[Nexus] Widget window ready");
             
             Ok(())
         })

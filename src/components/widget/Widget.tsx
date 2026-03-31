@@ -1,39 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Grip, Circle, AlertCircle } from '@/components/ui/icons';
 import { useTaskStore } from '@/stores/taskStore';
 import { useTopicStore } from '@/stores/topicStore';
 import { appWindow } from '@tauri-apps/api/window';
-import { availableMonitors } from '@tauri-apps/api/window';
 
 export const Widget: React.FC = () => {
   const stats = useTaskStore(state => state.getStats());
   const todayTasks = useTaskStore(state => state.getTodayTasks());
   const topics = useTopicStore(state => state.topics);
-  
-  useEffect(() => {
-    const positionWidget = async () => {
-      try {
-        const monitors = await availableMonitors();
-        if (monitors.length > 0) {
-          const primaryMonitor = monitors[0];
-          const size = primaryMonitor.size;
-          const widgetWidth = 320;
-          const widgetHeight = 200;
-          const margin = 20;
-          
-          const x = size.width - widgetWidth - margin;
-          const y = size.height - widgetHeight - margin - 40;
-          
-          await appWindow.setPosition({ type: 'Physical', x, y });
-        }
-      } catch (e) {
-        console.error('[Widget] Failed to position:', e);
-      }
-    };
-    
-    positionWidget();
-  }, []);
   
   const getTopic = (topicId?: string) => {
     if (!topicId) return null;

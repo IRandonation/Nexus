@@ -74,10 +74,16 @@ export const OmniBar: React.FC = () => {
   }, []);
   
   return (
-    <div className="min-h-[180px] p-5 bg-surface-1/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10">
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center">
-          <Search className="text-accent" size={16} />
+    <motion.div
+      initial={{ opacity: 0, y: -12, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -10, scale: 0.98 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
+      className="relative w-full h-full rounded-2xl border border-white/20 bg-slate-900/78 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl px-4 py-3"
+    >
+      <div className="flex items-center gap-3 h-11">
+        <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center">
+          <Search className="text-white/80" size={16} />
         </div>
         <input
           ref={inputRef}
@@ -85,32 +91,33 @@ export const OmniBar: React.FC = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-          placeholder="描述任务，例如：明天下午三点和导师开会"
-          className="bg-transparent text-white placeholder-gray-500 text-base flex-1 outline-none"
+          placeholder="添加任务，比如：明天下午三点和导师开会"
+          className="h-10 flex-1 rounded-xl bg-white/8 border border-white/10 px-3 text-[15px] text-white placeholder:text-white/40 outline-none focus:border-white/30 focus:bg-white/12"
         />
         {isParsing && (
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            className="text-cyan-300"
           >
-            <Sparkles className="text-accent" size={18} />
+            <Sparkles size={18} />
           </motion.div>
         )}
         <button
           onClick={handleClose}
-          className="w-6 h-6 rounded-md hover:bg-white/10 flex items-center justify-center text-gray-500 hover:text-white transition-colors"
+          className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-white/55 hover:text-white transition-colors"
         >
           <X size={14} />
         </button>
       </div>
-      
-      <div className="mt-3 flex items-center gap-2">
+
+      <div className="mt-2 flex items-center gap-2">
         <TopicSelector
           selectedTopicId={selectedTopicId}
           onSelect={setSelectedTopic}
         />
       </div>
-      
+
       <AnimatePresence>
         {parsedIntent && (
           <IntentPreview
@@ -120,6 +127,6 @@ export const OmniBar: React.FC = () => {
           />
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
