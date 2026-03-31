@@ -281,7 +281,7 @@ export DEEPSEEK_API_KEY="your-api-key"
 
 ---
 
-## 7. 风险与问题
+## 8. 风险与问题
 
 1. **API 依赖**: DeepSeek API 稳定性影响核心功能
    - 缓解：添加本地缓存和降级策略
@@ -294,7 +294,7 @@ export DEEPSEEK_API_KEY="your-api-key"
 
 ---
 
-## 8. 代码质量评估
+## 9. 代码质量评估
 
 ### 优势 ✅
 - **类型安全**: TypeScript 前端完整类型定义，Rust 后端 serde 序列化
