@@ -1,3 +1,4 @@
+use crate::commands::window;
 use tauri::{AppHandle, Manager, SystemTrayEvent};
 
 pub fn handle_tray_event(app: &AppHandle, event: SystemTrayEvent) {
@@ -8,6 +9,12 @@ pub fn handle_tray_event(app: &AppHandle, event: SystemTrayEvent) {
                     window.show().unwrap();
                     window.set_focus().unwrap();
                 }
+            }
+            "omni-bar" => {
+                let _ = window::show_omni_bar(app.clone());
+            }
+            "widget" => {
+                let _ = window::toggle_widget(app.clone());
             }
             "quit" => {
                 println!("[Nexus] Quit requested from tray menu");

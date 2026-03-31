@@ -1,0 +1,60 @@
+# 代码事实核验结果
+
+## 事实 1: Widget.tsx 是否存在真实拖拽事件实现
+
+**结论**: 否 - 不存在真实拖拽事件实现
+
+**证据路径**: `src/components/widget/Widget.tsx`
+
+**证据内容**:
+- 第 24 行仅有 CSS 类 `cursor-grab active:cursor-grabbing`（视觉样式）
+- 无 `onMouseDown`、`onPointerDown` 或 `data-tauri-drag` 属性
+- 仅是"看起来可拖拽"的静态 UI，无实际拖拽逻辑
+
+---
+
+## 事实 2: main.rs 是否接入 Insight/Scheduler 生命周期
+
+**结论**: 否 - 未接入 Insight/Scheduler 生命周期
+
+**证据路径**: `src-tauri/src/main.rs`
+
+**证据内容**:
+- 第 40-44 行仅注册了 3 个服务：TaskService、TopicService、AIService
+- 无 InsightService 或 Scheduler 相关的 manage() 调用
+- 无任何 "Insight" 或 "Scheduler" 关键字
+
+---
+
+## 事实 3: 代码中是否存在 FTS5 实现
+
+**结论**: 否 - 代码中不存在 FTS5 实现
+
+**证据路径**: 
+- `src-tauri/src/` (搜索结果：无匹配)
+- `docs/PROJECT.md` (仅文档提及)
+- `README.md` (仅文档提及)
+
+**证据内容**:
+- 在 `src-tauri/src` 目录搜索 `fts5|FTS5` 无匹配
+- FTS5 仅出现在文档描述中（README.md 第 9 行、docs/PROJECT.md 第 18/184/230 行）
+- 代码中无 FTS5 搜索表创建或查询逻辑
+
+---
+
+## 事实 4: 是否存在测试文件
+
+**结论**: 否 - 不存在测试文件
+
+**证据路径**: 
+- `src/` (搜索 `*.test.{ts,tsx,js,jsx}` 无结果)
+- `src-tauri/src/` (搜索 `*_test.rs` 无结果)
+
+**证据内容**:
+- glob 模式 `**/*.test.{ts,tsx,js,jsx}` 无匹配文件
+- glob 模式 `**/*_test.rs` 无匹配文件
+- 项目中无任何测试文件
+
+---
+
+生成时间: 2026-03-31

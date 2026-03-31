@@ -14,7 +14,9 @@ fn main() {
     
     use tauri::SystemTrayMenuItem as TMenuItem;
     let tray_menu = SystemTrayMenu::new()
-        .add_item(tauri::CustomMenuItem::new("show", "显示 Nexus"))
+        .add_item(tauri::CustomMenuItem::new("show", "显示主窗口"))
+        .add_item(tauri::CustomMenuItem::new("omni-bar", "快捷输入"))
+        .add_item(tauri::CustomMenuItem::new("widget", "桌面浮窗"))
         .add_native_item(TMenuItem::Separator)
         .add_item(tauri::CustomMenuItem::new("quit", "退出"));
 
