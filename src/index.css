@@ -6,13 +6,23 @@
   :root {
     --bg-primary: #0a0a0f;
     --bg-secondary: #12121a;
+    --bg-tertiary: #18181f;
     --bg-glass: rgba(18, 18, 26, 0.72);
     --glass-border: rgba(255, 255, 255, 0.08);
-    --accent-primary: #6366f1;
-    --accent-secondary: #8b5cf6;
+    --glass-border-hover: rgba(255, 255, 255, 0.14);
+    --glass-divider: rgba(255, 255, 255, 0.06);
+    --glass-highlight: rgba(255, 255, 255, 0.08);
+    --glass-active: rgba(255, 255, 255, 0.15);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-tertiary: #64748b;
+    --radius-control: 8px;
+    --radius-card: 12px;
+    --radius-shell: 16px;
+    --shadow-surface: 0 2px 8px rgba(0, 0, 0, 0.16);
+    --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.20);
+    --shadow-modal: 0 12px 28px rgba(0, 0, 0, 0.36);
+    --motion-fast: 180ms;
   }
   
   * {
@@ -28,24 +38,54 @@
 
 @layer components {
   .glass-container {
-    @apply bg-glass backdrop-blur-xl border border-glass-border rounded-2xl;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    @apply bg-glass backdrop-blur-glass border border-glass-border;
+    border-radius: var(--radius-shell);
+    box-shadow: var(--shadow-card);
   }
-  
+
+  .glass-surface {
+    @apply bg-glass-highlight border border-glass-border;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-surface);
+  }
+
   .glass-button {
-    @apply backdrop-blur border border-glass-border rounded-xl
-           px-4 py-2 text-sm font-medium transition-all duration-200
-           active:scale-95;
+    @apply border border-glass-border
+           px-4 py-2 text-sm font-medium transition-all
+           hover:border-glass-borderHover hover:bg-glass-highlight
+           active:scale-[0.98] active:border-glass-active;
+    border-radius: var(--radius-control);
+    transition-duration: var(--motion-fast);
   }
   
   .glass-input {
-    @apply bg-transparent border-none outline-none text-white
-           placeholder:text-gray-500 w-full;
+    @apply bg-transparent border border-glass-border
+           outline-none text-white placeholder:text-gray-500 w-full
+           focus:border-glass-borderHover focus:bg-glass-highlight transition-colors;
+    border-radius: var(--radius-control);
+    transition-duration: var(--motion-fast);
+  }
+
+  .glass-modal {
+    @apply glass-container;
+    box-shadow: var(--shadow-modal);
+  }
+
+  .glass-divider-top {
+    border-top: 1px solid var(--glass-divider);
+  }
+
+  .glass-divider-bottom {
+    border-bottom: 1px solid var(--glass-divider);
+  }
+
+  .glass-divider-right {
+    border-right: 1px solid var(--glass-divider);
   }
 }
 
 @layer utilities {
-  .text-gradient {
-    @apply bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent;
+  .motion-fast {
+    transition-duration: var(--motion-fast);
   }
 }

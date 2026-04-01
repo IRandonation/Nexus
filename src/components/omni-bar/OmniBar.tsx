@@ -79,11 +79,11 @@ export const OmniBar: React.FC = () => {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -10, scale: 0.98 }}
       transition={{ duration: 0.18, ease: 'easeOut' }}
-      className="relative w-full h-full rounded-2xl border border-white/20 bg-slate-900/78 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl px-4 py-3"
+      className="relative w-full h-full glass-container px-4 py-3"
     >
       <div className="flex items-center gap-3 h-11">
-        <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center">
-          <Search className="text-white/80" size={16} />
+        <div className="w-8 h-8 rounded-lg bg-glass-highlight flex items-center justify-center">
+          <Search className="text-gray-300" size={16} />
         </div>
         <input
           ref={inputRef}
@@ -92,20 +92,20 @@ export const OmniBar: React.FC = () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           placeholder="添加任务，比如：明天下午三点和导师开会"
-          className="h-10 flex-1 rounded-xl bg-white/8 border border-white/10 px-3 text-[15px] text-white placeholder:text-white/40 outline-none focus:border-white/30 focus:bg-white/12"
+          className="h-10 flex-1 rounded-lg bg-glass-highlight px-3 text-[15px] text-white placeholder:text-gray-500 outline-none focus:bg-glass-active transition-colors motion-fast"
         />
         {isParsing && (
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-            className="text-cyan-300"
+            className="text-gray-400"
           >
             <Sparkles size={18} />
           </motion.div>
         )}
         <button
           onClick={handleClose}
-          className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-white/55 hover:text-white transition-colors"
+          className="w-8 h-8 rounded-lg hover:bg-glass-highlight flex items-center justify-center text-gray-400 hover:text-gray-200 transition-colors motion-fast"
         >
           <X size={14} />
         </button>

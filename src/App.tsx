@@ -94,7 +94,7 @@ function App() {
         return (
           <>
             <StatsPanel />
-            <div className="glass-container p-6">
+            <div className="glass-surface p-6">
               <TaskList tasks={filteredTasks} />
             </div>
           </>
@@ -120,11 +120,11 @@ function App() {
       />
       
       <main className="flex-1 flex flex-col min-w-0">
-        <header className="h-14 border-b border-glass-border bg-surface-2/80 backdrop-blur-sm flex items-center justify-between px-4">
+        <header className="h-14 glass-divider-bottom bg-surface-2/80 backdrop-blur-glass flex items-center justify-between px-4">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="p-2 text-gray-400 hover:text-white transition-colors lg:hidden"
+              className="p-2 text-gray-400 hover:text-white transition-colors motion-fast lg:hidden"
             >
               <Menu size={20} />
             </button>
@@ -141,10 +141,10 @@ function App() {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1.5 rounded-lg text-sm transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-sm transition-all motion-fast ${
                   currentPage === page 
-                    ? 'bg-accent/20 text-accent' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-glass-highlight text-white' 
+                    : 'text-gray-400 hover:text-white hover:bg-glass-highlight'
                 }`}
               >
                 {page === 'tasks' && '任务'}
@@ -162,9 +162,9 @@ function App() {
           </div>
         </div>
         
-        <div className="p-4 border-t border-glass-border bg-surface-2">
+        <div className="p-4 glass-divider-top bg-surface-2">
           <div className="max-w-4xl mx-auto">
-            <div className="glass-container p-4">
+            <div className="glass-surface p-4">
               <div className="flex items-center gap-3">
                 <Search className="text-gray-400" size={20} />
                 <input
@@ -181,7 +181,7 @@ function App() {
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                   >
-                    <Sparkles className="text-accent" size={20} />
+                    <Sparkles className="text-gray-400" size={20} />
                   </motion.div>
                 )}
               </div>
@@ -206,9 +206,9 @@ function App() {
                           <div className="text-gray-400">{parsedIntent.entities.join(', ')}</div>
                         )}
                         {parsedIntent.conflictWarning && (
-                          <div className="text-yellow-400 text-xs">{parsedIntent.conflictWarning}</div>
-                        )}
-                        <div className="text-xs text-gray-500">
+                    <div className="text-gray-400 text-xs">{parsedIntent.conflictWarning}</div>
+                  )}
+                        <div className="text-xs text-gray-400">
                           置信度: {Math.round(parsedIntent.confidence * 100)}%
                         </div>
                       </div>
@@ -219,14 +219,14 @@ function App() {
                             onClick={handleDecompose}
                             className="glass-button flex items-center gap-2 text-sm"
                           >
-                            <Sparkles size={14} className="text-accent" />
+                            <Sparkles size={14} className="text-gray-400" />
                             使用拆解
                           </button>
                         )}
                         <button
                           onClick={handleCreateTask}
                           disabled={!input.trim()}
-                          className="glass-button bg-accent/20 border-accent/30 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="glass-button bg-glass-highlight hover:bg-glass-active border-glass-border flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <Plus size={18} />
                           创建任务

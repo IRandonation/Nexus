@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Check, X, Palette } from '@/components/ui/icons';
 import { useTopicStore } from '@/stores/topicStore';
 import type { CreateTopicPayload } from '@/types';
+import { normalizeTopicColor, withAlpha } from '@/utils/color';
 
 interface TopicSelectorProps {
   selectedTopicId: string | null;
@@ -16,7 +17,7 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
   const { topics, presetColors, loadTopics, loadPresetColors, createTopic } = useTopicStore();
   const [isCreating, setIsCreating] = useState(false);
   const [newTopicName, setNewTopicName] = useState('');
-  const [selectedColor, setSelectedColor] = useState(presetColors[0] || '#3B82F6');
+  const [selectedColor, setSelectedColor] = useState(presetColors[0] || '#64748B');
   const [customColor, setCustomColor] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
 
@@ -30,7 +31,7 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
 
     const payload: CreateTopicPayload = {
       name: newTopicName.trim(),
-      color: showCustomInput && customColor ? customColor : selectedColor,
+      color: normalizeTopicColor(showCustomInput && customColor ? customColor : selectedColor),
     };
 
     try {
@@ -51,10 +52,10 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
     <div className="relative">
       <button
         onClick={() => setIsCreating(!isCreating)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all hover:bg-white/10"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all motion-fast hover:bg-glass-highlight"
         style={selectedTopic ? { 
-          backgroundColor: `${selectedTopic.color}20`,
-          borderColor: selectedTopic.color,
+          backgroundColor: withAlpha(selectedTopic.color, 0.20),
+          borderColor: normalizeTopicColor(selectedTopic.color),
           border: '1px solid',
         } : undefined}
       >
@@ -62,7 +63,7 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
           <>
             <span
               className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: selectedTopic.color }}
+              style={{ backgroundColor: normalizeTopicColor(selectedTopic.color) }}
             />
             <span className="text-white">{selectedTopic.name}</span>
           </>
@@ -86,7 +87,7 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
               <span className="text-sm text-white">选择或新建主题</span>
               <button
                 onClick={() => setIsCreating(false)}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-white transition-colors motion-fast"
               >
                 <X size={14} />
               </button>
@@ -96,7 +97,7 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
               <div className="space-y-1 mb-3 max-h-32 overflow-y-auto">
                 <button
                   onClick={() => { onSelect(null); setIsCreating(false); }}
-                  className={`w-full text-left px-2 py-1.5 rounded text-sm transition-all hover:bg-white/10 ${!selectedTopicId ? 'bg-white/10' : ''}`}
+                  className={`w-full text-left px-2 py-1.5 rounded text-sm transition-all motion-fast hover:bg-glass-highlight ${!selectedTopicId ? 'bg-glass-highlight' : ''}`}
                 >
                   <span className="text-gray-400">无主题</span>
                 </button>
@@ -104,20 +105,20 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
                   <button
                     key={topic.id}
                     onClick={() => { onSelect(topic.id); setIsCreating(false); }}
-                    className={`w-full text-left px-2 py-1.5 rounded text-sm transition-all hover:bg-white/10 flex items-center gap-2 ${selectedTopicId === topic.id ? 'bg-white/10' : ''}`}
+                    className={`w-full text-left px-2 py-1.5 rounded text-sm transition-all motion-fast hover:bg-glass-highlight flex items-center gap-2 ${selectedTopicId === topic.id ? 'bg-glass-highlight' : ''}`}
                   >
                     <span
                       className="w-3 h-3 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: topic.color }}
+                      style={{ backgroundColor: normalizeTopicColor(topic.color) }}
                     />
                     <span className="text-white truncate">{topic.name}</span>
-                    {selectedTopicId === topic.id && <Check size={12} className="ml-auto text-accent" />}
+                    {selectedTopicId === topic.id && <Check size={12} className="ml-auto text-gray-300" />}
                   </button>
                 ))}
               </div>
             )}
 
-            <div className="border-t border-glass-border pt-3">
+            <div className="glass-divider-top pt-3">
               <input
                 type="text"
                 value={newTopicName}
@@ -132,13 +133,13 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
                   <button
                     key={color}
                     onClick={() => { setSelectedColor(color); setShowCustomInput(false); }}
-                    className={`w-6 h-6 rounded-full transition-transform ${selectedColor === color && !showCustomInput ? 'ring-2 ring-white scale-110' : 'hover:scale-110'}`}
-                    style={{ backgroundColor: color }}
-                  />
+                    className={`w-6 h-6 rounded-full transition-transform motion-fast ${selectedColor === color && !showCustomInput ? 'ring-2 ring-white scale-110' : 'hover:scale-110'}`}
+                     style={{ backgroundColor: normalizeTopicColor(color) }}
+                   />
                 ))}
                 <button
                   onClick={() => setShowCustomInput(!showCustomInput)}
-                  className={`w-6 h-6 rounded-full border border-dashed border-gray-500 flex items-center justify-center hover:border-white transition-colors ${showCustomInput ? 'border-white' : ''}`}
+                  className={`w-6 h-6 rounded-full border border-dashed border-gray-500 flex items-center justify-center hover:border-white transition-colors motion-fast ${showCustomInput ? 'border-white' : ''}`}
                 >
                   <Palette size={12} className="text-gray-400" />
                 </button>
@@ -148,7 +149,7 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
                 <div className="flex items-center gap-2 mb-2">
                   <input
                     type="color"
-                    value={customColor || '#3B82F6'}
+                    value={customColor || '#64748B'}
                     onChange={(e) => setCustomColor(e.target.value)}
                     className="w-8 h-8 rounded cursor-pointer"
                   />
@@ -159,7 +160,7 @@ export const TopicSelector: React.FC<TopicSelectorProps> = ({
               <button
                 onClick={handleCreateTopic}
                 disabled={!newTopicName.trim()}
-                className="glass-button w-full bg-accent/20 hover:bg-accent/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="glass-button w-full bg-glass-highlight hover:bg-glass-active disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 创建主题
               </button>

@@ -11,19 +11,19 @@ export const StatsPanel: React.FC = () => {
       icon: Circle,
       label: '待办',
       value: stats.pending,
-      color: 'text-blue-400',
+      color: 'text-gray-200',
     },
     {
       icon: CheckCircle2,
       label: '已完成',
       value: stats.completed,
-      color: 'text-green-400',
+      color: 'text-gray-200',
     },
     {
       icon: AlertCircle,
       label: '高优',
       value: stats.highPriority,
-      color: 'text-red-400',
+      color: 'text-gray-300',
     },
     {
       icon: Clock,
@@ -47,7 +47,7 @@ export const StatsPanel: React.FC = () => {
             <div className={`text-3xl font-bold ${item.color} mb-1`}>
               {item.value}
             </div>
-            <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
+            <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
               <item.icon size={12} />
               <span>{item.label}</span>
             </div>

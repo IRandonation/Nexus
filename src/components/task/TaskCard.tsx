@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Check, Calendar, MapPin, Tag } from '@/components/ui/icons';
 import type { Task, Topic } from '@/types';
+import { normalizeTopicColor, withAlpha } from '@/utils/color';
 
 interface TaskCardProps {
   task: Task;
@@ -12,9 +13,9 @@ interface TaskCardProps {
 
 export const TaskCard: React.FC<TaskCardProps> = ({ task, topic, onComplete, onClick }) => {
   const priorityColors = {
-    low: 'bg-green-500',
-    medium: 'bg-yellow-500',
-    high: 'bg-red-500',
+    low: 'bg-gray-500',
+    medium: 'bg-gray-400',
+    high: 'bg-gray-200',
   };
   
   const formatDate = (dateStr?: string) => {
@@ -42,7 +43,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, topic, onComplete, onC
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -100 }}
-      className="glass-container p-3 flex items-start gap-3 group hover:bg-white/5 transition-all cursor-pointer"
+      className="glass-surface p-4 flex items-start gap-3 group hover:bg-glass-active transition-all motion-fast cursor-pointer"
       onClick={() => onClick?.(task)}
     >
       <div className={`w-1 h-8 rounded-full ${priorityColors[task.priority]} mt-0.5`} />
@@ -52,10 +53,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, topic, onComplete, onC
           e.stopPropagation();
           onComplete(task.id);
         }}
-        className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all mt-0.5
+        className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all motion-fast mt-0.5
           ${task.status === 'completed' 
-            ? 'bg-accent border-accent' 
-            : 'border-gray-500 hover:border-accent'
+            ? 'bg-glass-active border-glass-borderHover' 
+            : 'border-glass-border hover:border-glass-borderHover'
           }`}
       >
         {task.status === 'completed' && (
@@ -67,7 +68,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, topic, onComplete, onC
       
       <div className="flex-1 min-w-0">
         <div className={`text-sm ${
-          task.status === 'completed' ? 'line-through text-gray-500' : 'text-white'
+          task.status === 'completed' ? 'line-through text-gray-400' : 'text-white'
         }`}>
           {displayContent}
         </div>
@@ -76,25 +77,28 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, topic, onComplete, onC
           {topic && (
             <span
               className="px-1.5 py-0.5 rounded text-xs text-white"
-              style={{ backgroundColor: `${topic.color}40`, borderLeft: `2px solid ${topic.color}` }}
+              style={{
+                backgroundColor: withAlpha(topic.color, 0.28),
+                borderLeft: `2px solid ${normalizeTopicColor(topic.color)}`,
+              }}
             >
               {topic.name}
             </span>
           )}
           
-          {formattedDate && (
-            <div className="flex items-center gap-1 text-xs text-accent-secondary">
+           {formattedDate && (
+             <div className="flex items-center gap-1 text-xs text-gray-400">
               <Calendar size={10} />
               <span>{formattedDate}</span>
-            </div>
-          )}
+             </div>
+           )}
           
-          {task.extractedEntities && task.extractedEntities.length > 0 && (
-            <div className="flex items-center gap-1 text-xs text-accent-tertiary">
-              <MapPin size={10} />
-              <span>{task.extractedEntities.join(', ')}</span>
-            </div>
-          )}
+            {task.extractedEntities && task.extractedEntities.length > 0 && (
+              <div className="flex items-center gap-1 text-xs text-gray-400">
+                <MapPin size={10} />
+                <span>{task.extractedEntities.join(', ')}</span>
+              </div>
+           )}
           
           {task.tags && task.tags.length > 0 && (
             <div className="flex items-center gap-1 text-xs text-gray-400">

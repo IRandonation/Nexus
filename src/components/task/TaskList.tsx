@@ -105,7 +105,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks: propTasks }) => {
     
     return (
       <div className="mb-4">
-        <h4 className={`text-xs font-medium mb-2 uppercase tracking-wider ${color || 'text-gray-500'}`}>
+        <h4 className={`text-xs font-medium mb-2 uppercase tracking-wider ${color || 'text-gray-400'}`}>
           {title} ({tasks.length})
         </h4>
         <div className="space-y-2">
@@ -133,24 +133,24 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks: propTasks }) => {
         </h3>
         
         {pendingTasks.length === 0 ? (
-          <div className="text-center text-gray-500 py-8">
+          <div className="text-center text-gray-400 py-8">
             暂无待办任务，点击下方输入框创建
           </div>
         ) : (
           <div>
-            {renderTaskSection('已逾期', categorizedTasks.overdue, 'text-red-400')}
-            {renderTaskSection('今天', categorizedTasks.today, 'text-accent')}
-            {renderTaskSection('明天', categorizedTasks.tomorrow, 'text-accent-secondary')}
-            {renderTaskSection('本周', categorizedTasks.thisWeek, 'text-yellow-400')}
-            {renderTaskSection('稍后', categorizedTasks.later, 'text-gray-500')}
-            {renderTaskSection('无日期', categorizedTasks.noDate, 'text-gray-600')}
+            {renderTaskSection('已逾期', categorizedTasks.overdue, 'text-gray-200')}
+            {renderTaskSection('今天', categorizedTasks.today, 'text-gray-200')}
+            {renderTaskSection('明天', categorizedTasks.tomorrow, 'text-gray-300')}
+            {renderTaskSection('本周', categorizedTasks.thisWeek, 'text-gray-300')}
+            {renderTaskSection('稍后', categorizedTasks.later, 'text-gray-400')}
+            {renderTaskSection('无日期', categorizedTasks.noDate, 'text-gray-400')}
           </div>
         )}
       </div>
       
       {completedTasks.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium text-gray-500 mb-3 uppercase tracking-wider">
+          <h3 className="text-sm font-medium text-gray-400 mb-3 uppercase tracking-wider">
             已完成 ({completedTasks.length})
           </h3>
           <div className="space-y-2 opacity-60">

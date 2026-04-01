@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTopicStore } from '@/stores/topicStore';
 import { useTaskStore } from '@/stores/taskStore';
 import { Plus, Check, ChevronDown, FolderOpen, MoreHorizontal } from '@/components/ui/icons';
+import { normalizeTopicColor, withAlpha } from '@/utils/color';
 
 interface TopicSidebarProps {
   collapsed: boolean;
@@ -14,7 +15,7 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
   const tasks = useTaskStore(state => state.tasks);
   const [isCreating, setIsCreating] = useState(false);
   const [newTopicName, setNewTopicName] = useState('');
-  const [selectedColor, setSelectedColor] = useState('#3B82F6');
+  const [selectedColor, setSelectedColor] = useState('#64748B');
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   useState(() => {
@@ -24,7 +25,7 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
 
   const handleCreateTopic = async () => {
     if (!newTopicName.trim()) return;
-    await createTopic({ name: newTopicName.trim(), color: selectedColor });
+    await createTopic({ name: newTopicName.trim(), color: normalizeTopicColor(selectedColor) });
     await loadTopics();
     setNewTopicName('');
     setIsCreating(false);
@@ -39,7 +40,7 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
       <div className="w-12 h-full bg-surface-2 border-r border-glass-border flex flex-col items-center py-4">
         <button
           onClick={onToggle}
-          className="p-2 text-gray-400 hover:text-white transition-colors"
+          className="p-2 text-gray-400 hover:text-white transition-colors motion-fast"
         >
           <FolderOpen size={20} />
         </button>
@@ -48,10 +49,10 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
             <button
               key={topic.id}
               onClick={() => setSelectedTopic(topic.id === selectedTopicId ? null : topic.id)}
-              className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+              className="w-8 h-8 rounded-lg flex items-center justify-center transition-all motion-fast"
               style={{ 
-                backgroundColor: topic.id === selectedTopicId ? `${topic.color}40` : 'transparent',
-                borderLeft: `3px solid ${topic.color}`,
+                backgroundColor: topic.id === selectedTopicId ? withAlpha(topic.color, 0.25) : 'transparent',
+                borderLeft: `3px solid ${normalizeTopicColor(topic.color)}`,
               }}
               title={topic.name}
             >
@@ -69,11 +70,11 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
       animate={{ width: 240 }}
       className="h-full bg-surface-2 border-r border-glass-border flex flex-col overflow-hidden"
     >
-      <div className="flex items-center justify-between p-4 border-b border-glass-border">
+      <div className="flex items-center justify-between p-4 glass-divider-bottom">
         <h2 className="text-sm font-medium text-white">任务主题</h2>
         <button
           onClick={onToggle}
-          className="p-1 text-gray-400 hover:text-white transition-colors"
+          className="p-1 text-gray-400 hover:text-white transition-colors motion-fast"
         >
           <ChevronDown size={16} className="rotate-[-90deg]" />
         </button>
@@ -82,12 +83,12 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
       <div className="flex-1 overflow-y-auto p-2">
         <button
           onClick={() => setSelectedTopic(null)}
-          className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all hover:bg-white/5 mb-1 ${
-            !selectedTopicId ? 'bg-white/10' : ''
+          className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all motion-fast hover:bg-glass-highlight mb-1 ${
+            !selectedTopicId ? 'bg-glass-highlight' : ''
           }`}
         >
-          <span className="text-gray-300">全部任务</span>
-          <span className="text-xs text-gray-500 ml-2">{tasks.filter(t => t.status === 'pending').length}</span>
+          <span className="text-gray-200">全部任务</span>
+          <span className="text-xs text-gray-400 ml-2">{tasks.filter(t => t.status === 'pending').length}</span>
         </button>
 
         <div className="space-y-1 mt-2">
@@ -99,26 +100,26 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
               <div key={topic.id} className="relative group">
                 <button
                   onClick={() => setSelectedTopic(isSelected ? null : topic.id)}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all hover:bg-white/5 flex items-center gap-2 ${
-                    isSelected ? 'bg-white/10' : ''
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all motion-fast hover:bg-glass-highlight flex items-center gap-2 ${
+                    isSelected ? 'bg-glass-highlight' : ''
                   }`}
                 >
                   <span
                     className="w-3 h-3 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: topic.color }}
+                      style={{ backgroundColor: normalizeTopicColor(topic.color) }}
                   />
                   <span className="text-white truncate flex-1">{topic.name}</span>
                   {count > 0 && (
-                    <span className="text-xs text-gray-500">{count}</span>
+                    <span className="text-xs text-gray-400">{count}</span>
                   )}
-                  {isSelected && <Check size={12} className="text-accent" />}
+                  {isSelected && <Check size={12} className="text-gray-300" />}
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setOpenMenuId(isMenuOpen ? null : topic.id);
                   }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-white/10 text-gray-400 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-glass-highlight text-gray-400 hover:text-white transition-colors motion-fast opacity-0 group-hover:opacity-100"
                   style={{ opacity: isMenuOpen ? 1 : undefined }}
                 >
                   <MoreHorizontal size={14} />
@@ -126,10 +127,10 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
                 {isMenuOpen && (
                   <>
                     <div
-                      className="fixed inset-0 z-10"
+                      className="fixed inset-0 z-40"
                       onClick={() => setOpenMenuId(null)}
                     />
-                    <div className="absolute right-2 top-full mt-1 z-20 bg-surface-1 border border-glass-border rounded-lg shadow-lg overflow-hidden min-w-[100px]">
+                    <div className="absolute right-2 top-full mt-1 z-50 bg-surface-1 border border-glass-border rounded-lg shadow-lg overflow-hidden min-w-[100px]">
                       <button
                         onClick={async () => {
                           await deleteTopic(topic.id);
@@ -139,7 +140,7 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
                             setSelectedTopic(null);
                           }
                         }}
-                        className="w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-white/5 transition-colors flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-glass-highlight transition-colors motion-fast flex items-center gap-2"
                       >
                         删除
                       </button>
@@ -158,7 +159,7 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
             initial={{ height: 0 }}
             animate={{ height: 'auto' }}
             exit={{ height: 0 }}
-            className="border-t border-glass-border p-3 space-y-2"
+            className="glass-divider-top p-3 space-y-2"
           >
             <input
               type="text"
@@ -177,15 +178,15 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
                   className={`w-5 h-5 rounded-full transition-transform ${
                     selectedColor === color ? 'ring-2 ring-white scale-110' : ''
                   }`}
-                  style={{ backgroundColor: color }}
-                />
-              ))}
+                   style={{ backgroundColor: normalizeTopicColor(color) }}
+                 />
+               ))}
             </div>
             <div className="flex gap-2">
               <button
                 onClick={handleCreateTopic}
                 disabled={!newTopicName.trim()}
-                className="glass-button flex-1 text-xs bg-accent/20 disabled:opacity-50"
+                className="glass-button flex-1 text-xs bg-glass-highlight disabled:opacity-50"
               >
                 创建
               </button>
@@ -200,7 +201,7 @@ export const TopicSidebar: React.FC<TopicSidebarProps> = ({ collapsed, onToggle 
         )}
       </AnimatePresence>
 
-      <div className="p-3 border-t border-glass-border">
+      <div className="p-3 glass-divider-top">
         {isCreating ? null : (
           <button
             onClick={() => setIsCreating(true)}

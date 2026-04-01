@@ -47,13 +47,13 @@ export const Settings: React.FC = () => {
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
             placeholder="输入 DeepSeek API Key"
-            className="glass-input glass-container px-4 py-3 w-full"
+            className="glass-input px-4 py-3 w-full"
           />
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-gray-400 mt-2">
             API Key 仅存储在本地，不会上传到任何服务器
           </p>
           {saveStatus && (
-            <p className="text-xs text-accent mt-2">{saveStatus}</p>
+            <p className="text-xs text-gray-300 mt-2">{saveStatus}</p>
           )}
         </section>
         
@@ -67,7 +67,7 @@ export const Settings: React.FC = () => {
               type="checkbox"
               checked={notifications}
               onChange={(e) => setNotifications(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-500 accent-accent"
+              className="w-4 h-4 rounded border-gray-500"
             />
             <span className="text-white">启用任务提醒通知</span>
           </label>
@@ -81,13 +81,13 @@ export const Settings: React.FC = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setTheme('dark')}
-              className={`glass-button ${theme === 'dark' ? 'bg-accent/20 border-accent/30' : ''}`}
+              className={`glass-button ${theme === 'dark' ? 'bg-glass-active border-glass-borderHover' : ''}`}
             >
               深色
             </button>
             <button
               onClick={() => setTheme('light')}
-              className={`glass-button ${theme === 'light' ? 'bg-accent/20 border-accent/30' : ''}`}
+              className={`glass-button ${theme === 'light' ? 'bg-glass-active border-glass-borderHover' : ''}`}
             >
               浅色
             </button>
@@ -100,7 +100,7 @@ export const Settings: React.FC = () => {
             数据
           </h3>
           <div className="flex gap-2">
-            <button className="glass-button text-red-400 hover:text-red-300">
+            <button className="glass-button text-gray-300 hover:text-white">
               清除所有数据
             </button>
             <button className="glass-button">
@@ -113,7 +113,7 @@ export const Settings: React.FC = () => {
       <div className="mt-8 flex justify-end">
         <button
           onClick={saveSettings}
-          className="glass-button bg-accent/20 hover:bg-accent/30 border-accent/30"
+          className="glass-button bg-glass-highlight hover:bg-glass-active border-glass-border"
         >
           保存设置
         </button>

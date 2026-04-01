@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { invoke } from '@tauri-apps/api/tauri';
 import type { Topic, CreateTopicPayload, UpdateTopicPayload } from '@/types';
+import { normalizeTopicColor } from '@/utils/color';
 
 interface TopicStore {
   topics: Topic[];
@@ -28,7 +29,13 @@ export const useTopicStore = create<TopicStore>((set) => ({
     try {
       const topics = await invoke<Topic[]>('get_topics');
       console.log(`[TopicStore] Loaded ${topics.length} topics`);
-      set({ topics, isLoading: false });
+      set({
+        topics: topics.map((topic) => ({
+          ...topic,
+          color: normalizeTopicColor(topic.color),
+        })),
+        isLoading: false,
+      });
     } catch (error) {
       console.error('[TopicStore] Failed to load topics:', error);
       set({ isLoading: false });
@@ -38,16 +45,20 @@ export const useTopicStore = create<TopicStore>((set) => ({
   loadPresetColors: async () => {
     try {
       const colors = await invoke<string[]>('get_preset_colors');
-      set({ presetColors: colors });
+      set({ presetColors: colors.map((color) => normalizeTopicColor(color)) });
     } catch (error) {
       console.error('[TopicStore] Failed to load preset colors:', error);
     }
   },
   
   createTopic: async (payload: CreateTopicPayload) => {
-    console.log('[TopicStore] Creating topic:', payload.name);
+    const normalizedPayload: CreateTopicPayload = {
+      ...payload,
+      color: normalizeTopicColor(payload.color ?? '#64748B'),
+    };
+    console.log('[TopicStore] Creating topic:', normalizedPayload.name);
     try {
-      const topic = await invoke<Topic>('create_topic', { payload });
+      const topic = await invoke<Topic>('create_topic', { payload: normalizedPayload });
       console.log('[TopicStore] Topic created:', topic.id);
       set(state => ({ topics: [...state.topics, topic] }));
       return topic;
@@ -59,9 +70,12 @@ export const useTopicStore = create<TopicStore>((set) => ({
   },
   
   updateTopic: async (payload: UpdateTopicPayload) => {
-    console.log('[TopicStore] Updating topic:', payload.id);
+    const normalizedPayload: UpdateTopicPayload = payload.color
+      ? { ...payload, color: normalizeTopicColor(payload.color) }
+      : payload;
+    console.log('[TopicStore] Updating topic:', normalizedPayload.id);
     try {
-      const topic = await invoke<Topic>('update_topic', { payload });
+      const topic = await invoke<Topic>('update_topic', { payload: normalizedPayload });
       set(state => ({
         topics: state.topics.map(t => t.id === topic.id ? topic : t)
       }));
