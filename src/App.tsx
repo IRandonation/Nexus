@@ -113,13 +113,13 @@ function App() {
   };
   
   return (
-    <div className="h-screen bg-surface-1 flex">
+    <div className="h-screen bg-transparent flex">
       <TopicSidebar 
         collapsed={sidebarCollapsed} 
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} 
       />
       
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 bg-surface-1">
         <header className="h-14 glass-divider-bottom bg-surface-2/80 backdrop-blur-glass flex items-center justify-between px-4">
           <div className="flex items-center gap-3">
             <button

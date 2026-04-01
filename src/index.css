@@ -7,11 +7,11 @@
     --bg-primary: #0a0a0f;
     --bg-secondary: #12121a;
     --bg-tertiary: #18181f;
-    --bg-glass: rgba(18, 18, 26, 0.72);
+    --bg-glass: rgba(18, 18, 26, 0.92);
     --glass-border: rgba(255, 255, 255, 0.08);
     --glass-border-hover: rgba(255, 255, 255, 0.14);
     --glass-divider: rgba(255, 255, 255, 0.06);
-    --glass-highlight: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.15);
     --glass-active: rgba(255, 255, 255, 0.15);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
@@ -30,7 +30,7 @@
   }
   
   body {
-    @apply bg-surface-1 text-white antialiased;
+    @apply bg-transparent text-white antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     margin: 0;
   }
@@ -44,7 +44,7 @@
   }
 
   .glass-surface {
-    @apply bg-glass-highlight border border-glass-border;
+    @apply bg-glass border border-glass-border backdrop-blur-glass;
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-surface);
   }
